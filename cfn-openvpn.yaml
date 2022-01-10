@@ -228,7 +228,7 @@ Resources:
     DependsOn: OpenVPNS3Bucket
     Properties:
       ImageId: !Ref LatestAmiId
-      InstanceType: t2.micro
+      InstanceType: t2.nano
       SourceDestCheck: false
       KeyName: !Ref SSHKeyName
       NetworkInterfaces:
