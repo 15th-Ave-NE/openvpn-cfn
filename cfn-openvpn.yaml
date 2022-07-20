@@ -54,7 +54,7 @@ Parameters:
 
   OpenVPNVersion:
     Type: "String"
-    Default: "2.4.11" # Latest Tested Version on Amazon Linux 2
+    Default: "2.4.12" # Latest Tested Version on Amazon Linux 2
 
   EasyRSAREQCN:
     Type: "String"
@@ -228,7 +228,7 @@ Resources:
     DependsOn: OpenVPNS3Bucket
     Properties:
       ImageId: !Ref LatestAmiId
-      InstanceType: t2.nano
+      InstanceType: t3.micro
       SourceDestCheck: false
       KeyName: !Ref SSHKeyName
       NetworkInterfaces:
@@ -475,12 +475,12 @@ Resources:
             01_upload_file_openvpn-clientuser.ovpn:
               cwd: "/opt/easy-rsa/pki"
               command: !Sub |
-                aws s3 cp openvpn_clientuser.ovpn s3://${OpenVPNS3Bucket}/client/openvpn_clientuser.ovpn
+                aws s3 cp openvpn_clientuser.ovpn s3://${OpenVPNS3Bucket}/client/openvpn_clientuser.ovpn --region ${AWS::Region}
             02_upload_file_cfn_init_log:
               cwd: "/var/log"
               test: "test -e /var/log/cfn-init.log"
               command: !Sub |
-                aws s3 cp /var/log/cfn-init.log s3://${OpenVPNS3Bucket}/log/genSecrets_cfn-init.log
+                aws s3 cp /var/log/cfn-init.log s3://${OpenVPNS3Bucket}/log/genSecrets_cfn-init.log --region ${AWS::Region}
 
   # Original Source for the following Python 3.7 CustomResource section:
   # https://github.com/mike-mosher/custom-resource-s3-bucket-delete
