@@ -550,7 +550,7 @@ Resources:
               cfnresponse.send(event, context, ResponseStatus, responseData)
 
       Handler: index.handler
-      Runtime: python3.7
+      Runtime: python3.12
       Role: !GetAtt EmptyS3BucketLambdaExecutionRole.Arn
 
   EmptyS3Bucket:
