@@ -27,11 +27,11 @@ Parameters:
 
   OpenVPNPort:
     Type: Number
-    Default: 1194
+    Default: 1224
     Description: OpenVPN port. Standards - 443 for TCP / 1194 for UDP
     AllowedValues:
       - 443
-      - 1194
+      - 1224
 
   SSHKeyName:
     Type: AWS::EC2::KeyPair::KeyName
