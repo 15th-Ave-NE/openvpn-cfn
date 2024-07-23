@@ -20,18 +20,18 @@ Description: OpenVPN Stack
 Parameters:
   OpenVPNProtocol:
     Type: String
-    Default: udp
+    Default: tcp
     AllowedValues: 
       - udp
       - tcp
 
   OpenVPNPort:
     Type: Number
-    Default: 1224
-    Description: OpenVPN port. Standards - 443 for TCP / 1194 for UDP
+    Default: 1334
+    Description: OpenVPN port. Standards - 443 for TCP / 1194 for UDP/TCP
     AllowedValues:
       - 443
-      - 1224
+      - 1334
 
   SSHKeyName:
     Type: AWS::EC2::KeyPair::KeyName
@@ -369,6 +369,12 @@ Resources:
                 dev tun
                 proto ${OpenVPNProtocol}
                 remote ${OpenVPNEIP} ${OpenVPNPort}
+                
+                sndbuf 0
+                rcvbuf 0
+                comp-lzo
+                setenv opt block-outside-dns
+                
                 tls-client
                 tls-version-min 1.2
                 tls-cipher TLS-ECDHE-RSA-WITH-AES-128-GCM-SHA256:TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256:TLS-ECDHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-256-CBC-SHA256
@@ -423,6 +429,14 @@ Resources:
               content: !Sub |
                 port ${OpenVPNPort}
                 proto ${OpenVPNProtocol}
+                
+                sndbuf 0
+                rcvbuf 0
+                comp-lzo
+                topology subnet
+                push "redirect-gateway def1 bypass-dhcp"
+                push "dhcp-option DNS 127.0.0.53"
+  
                 dev tun
                 server 172.16.0.0 255.255.252.0
                 push "redirect-gateway def1"
